@@ -1,0 +1,57 @@
+.dashboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 30px;
+
+    background: #123d64;
+
+    color: white;
+
+    margin-bottom: 40px;
+}
+
+.dashboard-nav h2 {
+    margin: 0;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-buttons a {
+    text-decoration: none;
+
+    color: white;
+
+    padding: 10px 15px;
+
+    border-radius: 5px;
+
+    background: #1d5d91;
+}
+
+.nav-buttons a:hover {
+    background: #287bbd;
+}
+
+.nav-buttons button {
+    border: none;
+
+    background: #c62828;
+
+    color: white;
+
+    padding: 10px 15px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+.nav-buttons button:hover {
+    background: #a51f1f;
+}

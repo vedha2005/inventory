@@ -1,0 +1,27 @@
+.products-table {
+    width: 90%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background: white;
+}
+
+.products-table th,
+.products-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.products-table th {
+    background: #2E7D32;
+    color: white;
+}
+
+.delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
