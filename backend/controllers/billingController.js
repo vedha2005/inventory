@@ -74,10 +74,6 @@ const createBill = (req, res) => {
     } = req.body;
 
 
-    console.log("BILL DATA RECEIVED:");
-    console.log(req.body);
-
-
     if (!customerId) {
 
         return res.status(400).json({
@@ -96,6 +92,7 @@ const createBill = (req, res) => {
     }
 
 
+    // Create Bill
     billingModel.createBill(
         customerId,
         total,
@@ -105,8 +102,7 @@ const createBill = (req, res) => {
 
             if (err) {
 
-                console.log("BILL INSERT ERROR:");
-                console.log(err);
+                console.log("BILL INSERT ERROR:", err);
 
                 return res.status(500).json({
                     success: false,
@@ -127,6 +123,7 @@ const createBill = (req, res) => {
                     Number(item.quantity);
 
 
+                // Save Bill Item
                 billingModel.createBillItem(
                     billId,
                     item.productId,
@@ -137,8 +134,7 @@ const createBill = (req, res) => {
 
                         if (itemErr) {
 
-                            console.log("ITEM INSERT ERROR:");
-                            console.log(itemErr);
+                            console.log("ITEM INSERT ERROR:", itemErr);
 
                             return res.status(500).json({
                                 success: false,
@@ -147,17 +143,53 @@ const createBill = (req, res) => {
                         }
 
 
-                        completed++;
+                        // Reduce Product Stock
+                        billingModel.reduceProductQuantity(
+                            item.productId,
+                            item.quantity,
+                            (stockErr, stockResult) => {
+
+                                if (stockErr) {
+
+                                    console.log(
+                                        "STOCK UPDATE ERROR:",
+                                        stockErr
+                                    );
+
+                                    return res.status(500).json({
+                                        success: false,
+                                        message: stockErr.message
+                                    });
+                                }
 
 
-                        if (completed === items.length) {
+                                // Check whether enough stock was available
+                                if (stockResult.affectedRows === 0) {
 
-                            res.status(201).json({
-                                success: true,
-                                message: "Bill saved successfully",
-                                billId: billId
-                            });
-                        }
+                                    return res.status(400).json({
+                                        success: false,
+                                        message:
+                                            "Not enough stock available for this product"
+                                    });
+                                }
+
+
+                                completed++;
+
+
+                                // All items completed
+                                if (completed === items.length) {
+
+                                    res.status(201).json({
+                                        success: true,
+                                        message:
+                                            "Bill saved and stock updated successfully",
+                                        billId: billId
+                                    });
+                                }
+
+                            }
+                        );
 
                     }
                 );

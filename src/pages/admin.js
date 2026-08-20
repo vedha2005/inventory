@@ -7,24 +7,35 @@ function Admin() {
 
     const [productCount, setProductCount] = useState(0);
     const [customerCount, setCustomerCount] = useState(0);
+    const [lowStockProducts, setLowStockProducts] = useState([]);
 
     useEffect(() => {
 
+        // Get Dashboard Counts
         axios.get("http://localhost:5000/api/dashboard")
             .then((response) => {
 
-                setProductCount(
-                    response.data.totalProducts
-                );
-
-                setCustomerCount(
-                    response.data.totalCustomers
-                );
+                setProductCount(response.data.totalProducts);
+                setCustomerCount(response.data.totalCustomers);
 
             })
             .catch((error) => {
 
                 console.log("Dashboard Error:", error);
+
+            });
+
+
+        // Get Low Stock Products
+        axios.get("http://localhost:5000/api/dashboard/low-stock")
+            .then((response) => {
+
+                setLowStockProducts(response.data.products);
+
+            })
+            .catch((error) => {
+
+                console.log("Low Stock Error:", error);
 
             });
 
@@ -62,9 +73,7 @@ function Admin() {
                     <button
                         onClick={() => {
 
-                            localStorage.removeItem(
-                                "isLoggedIn"
-                            );
+                            localStorage.removeItem("isLoggedIn");
 
                             window.location.href = "/";
 
@@ -80,9 +89,7 @@ function Admin() {
 
             {/* Dashboard */}
 
-            <h1>
-                SuperMart Dashboard
-            </h1>
+            <h1>SuperMart Dashboard</h1>
 
 
             <div className="dashboard-cards">
@@ -97,13 +104,9 @@ function Admin() {
 
                     <div>
 
-                        <h2>
-                            {productCount}
-                        </h2>
+                        <h2>{productCount}</h2>
 
-                        <p>
-                            Total Products
-                        </p>
+                        <p>Total Products</p>
 
                     </div>
 
@@ -120,17 +123,62 @@ function Admin() {
 
                     <div>
 
-                        <h2>
-                            {customerCount}
-                        </h2>
+                        <h2>{customerCount}</h2>
 
-                        <p>
-                            Total Customers
-                        </p>
+                        <p>Total Customers</p>
 
                     </div>
 
                 </div>
+
+            </div>
+
+
+            {/* Low Stock Alert */}
+
+            <div className="low-stock-alert">
+
+                <h2>⚠ Low Stock Alert</h2>
+
+                {lowStockProducts.length === 0 ? (
+
+                    <p>✅ All products have sufficient stock.</p>
+
+                ) : (
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Quantity Left</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {lowStockProducts.map((product) => (
+
+                                <tr key={product.id}>
+
+                                    <td>{product.id}</td>
+
+                                    <td>{product.product_name}</td>
+
+                                    <td>
+                                        ⚠ {product.quantity} left
+                                    </td>
+
+                                </tr>
+
+                            ))}
+
+                        </tbody>
+
+                    </table>
+
+                )}
 
             </div>
 

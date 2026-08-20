@@ -20,6 +20,7 @@ const getProducts = (callback) => {
     const sql = `
         SELECT id, product_name, price, quantity
         FROM products
+        WHERE is_active = TRUE
         ORDER BY id DESC
     `;
 
@@ -85,9 +86,36 @@ const createBillItem = (
 };
 
 
+// Reduce product stock
+const reduceProductQuantity = (
+    productId,
+    quantity,
+    callback
+) => {
+
+    const sql = `
+        UPDATE products
+        SET quantity = quantity - ?
+        WHERE id = ?
+        AND quantity >= ?
+    `;
+
+    db.query(
+        sql,
+        [
+            quantity,
+            productId,
+            quantity
+        ],
+        callback
+    );
+};
+
+
 module.exports = {
     getCustomerByPhone,
     getProducts,
     createBill,
-    createBillItem
+    createBillItem,
+    reduceProductQuantity
 };
