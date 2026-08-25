@@ -1,0 +1,2 @@
+2026-08-25 10:32:17,101 - MainThread - sqlmesh.core.console - WARNING - The following models already exist and can't be converted to external: "supermart"."products". Perhaps these models have been removed, while downstream models that reference them weren't updated accordingly. (console.py:2335)
+2026-08-25 10:32:17,129 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)

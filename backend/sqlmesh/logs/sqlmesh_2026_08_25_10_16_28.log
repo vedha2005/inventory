@@ -1,0 +1,105 @@
+2026-08-25 10:16:33,148 - MainThread - sqlmesh.core.config.connection - INFO - Creating new DuckDB adapter for in-memory database (connection.py:499)
+2026-08-25 10:16:33,603 - ThreadPoolExecutor-0_0 - sqlmesh.core.console - WARNING - Model '"sqlmesh_example"."full_model"' was not found at C:\Users\LakshmiVedha\myproject\backend\sqlmesh\tests\test_full_model.yaml (console.py:2335)
+2026-08-25 10:16:49,050 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage PhysicalLayerSchemaCreationStage (evaluator.py:123)
+2026-08-25 10:16:49,052 - ThreadPoolExecutor-1_0 - sqlmesh.core.snapshot.evaluator - INFO - Creating schema 'sqlmesh__supermart' (evaluator.py:1449)
+2026-08-25 10:16:49,155 - ThreadPoolExecutor-1_0 - sqlmesh.core.engine_adapter.base - INFO - Executing SQL: /* SQLMESH_PLAN: 7d8ec7b872d34f0c808f402ce78d49c2 */ CREATE SCHEMA IF NOT EXISTS `sqlmesh__supermart` (base.py:2624)
+2026-08-25 10:16:49,165 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage PhysicalLayerUpdateStage (evaluator.py:123)
+2026-08-25 10:16:49,167 - ThreadPoolExecutor-2_0 - sqlmesh.core.snapshot.evaluator - INFO - Listing data objects in schema sqlmesh__supermart (evaluator.py:1616)
+2026-08-25 10:16:50,282 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage BackfillStage (evaluator.py:123)
+2026-08-25 10:16:50,282 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage EnvironmentRecordUpdateStage (evaluator.py:123)
+2026-08-25 10:16:50,286 - MainThread - sqlmesh.core.state_sync.db.facade - INFO - Promoting environment 'prod' (facade.py:167)
+2026-08-25 10:16:50,333 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage UnpauseStage (evaluator.py:123)
+2026-08-25 10:16:50,346 - MainThread - sqlmesh.core.plan.evaluator - INFO - Evaluating plan stage VirtualLayerUpdateStage (evaluator.py:123)
+2026-08-25 10:16:50,346 - ThreadPoolExecutor-3_0 - sqlmesh.core.snapshot.evaluator - INFO - Creating schema 'supermart' (evaluator.py:1449)
+2026-08-25 10:16:50,412 - ThreadPoolExecutor-3_0 - sqlmesh.core.engine_adapter.base - INFO - Executing SQL: /* SQLMESH_PLAN: 7d8ec7b872d34f0c808f402ce78d49c2 */ CREATE SCHEMA IF NOT EXISTS `supermart` (base.py:2624)
+2026-08-25 10:16:50,422 - ThreadPoolExecutor-4_0 - sqlmesh.core.snapshot.evaluator - INFO - Listing data objects in schema supermart (evaluator.py:1616)
+2026-08-25 10:16:50,608 - ThreadPoolExecutor-5_0 - sqlmesh.core.snapshot.evaluator - INFO - Updating view 'supermart.products' to point at table 'sqlmesh__supermart.supermart__products__1498494511' (evaluator.py:1988)
+2026-08-25 10:16:50,613 - ThreadPoolExecutor-5_0 - sqlmesh.core.engine_adapter.base - WARNING - Target data object '`supermart`.`products`' is a table and not a view, dropping it (base.py:2901)
+2026-08-25 10:16:50,613 - ThreadPoolExecutor-5_0 - sqlmesh.core.engine_adapter.base - INFO - Executing SQL: /* SQLMESH_PLAN: 7d8ec7b872d34f0c808f402ce78d49c2 */ DROP TABLE IF EXISTS `supermart`.`products` (base.py:2624)
+2026-08-25 10:16:50,713 - MainThread - sqlmesh.core.context - INFO - Plan application failed. (context.py:1808)
+Traceback (most recent call last):
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\concurrency.py", line 69, in _process_node
+    self.fn(node)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\concurrency.py", line 172, in <lambda>
+    lambda s_id: fn(snapshots_by_id[s_id]),
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\snapshot\evaluator.py", line 318, in <lambda>
+    lambda s: self._promote_snapshot(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\snapshot\evaluator.py", line 1272, in _promote_snapshot
+    _evaluation_strategy(snapshot, adapter).promote(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\snapshot\evaluator.py", line 1999, in promote
+    self.adapter.create_view(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\shared.py", line 335, in internal_wrapper
+    return func(*list_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 1337, in create_view
+    self.drop_data_object_on_type_mismatch(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 2907, in drop_data_object_on_type_mismatch
+    self.drop_data_object(data_object)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 1109, in drop_data_object
+    self.drop_table(data_object.to_table(), exists=ignore_if_not_exists)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\shared.py", line 335, in internal_wrapper
+    return func(*list_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 1124, in drop_table
+    self._drop_object(name=table_name, exists=exists, **kwargs)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 1158, in _drop_object
+    self.execute(exp.Drop(this=exp.to_table(name), kind=kind, exists=exists, **drop_args))
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 2601, in execute
+    self._execute(sql, track_rows_processed, **kwargs)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\engine_adapter\base.py", line 2633, in _execute
+    self.cursor.execute(sql, **kwargs)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\cursors.py", line 159, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\cursors.py", line 330, in _query
+    conn.query(q)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\connections.py", line 582, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\connections.py", line 847, in _read_query_result
+    result.read()
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\connections.py", line 1245, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\connections.py", line 803, in _read_packet
+    packet.raise_for_error()
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymysql\err.py", line 154, in raise_mysql_exception
+    raise errorclass(errno, errval, sqlstate=sqlstate)
+pymysql.err.OperationalError: (3730, "Cannot drop table 'products' referenced by a foreign key constraint 'bill_items_ibfk_2' on table 'bill_items'.")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\context.py", line 1800, in apply
+    self._apply(plan, circuit_breaker)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\context.py", line 2593, in _apply
+    self._scheduler.create_plan_evaluator(self).evaluate(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\evaluator.py", line 105, in evaluate
+    self._evaluate_stages(plan_stages, plan)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\evaluator.py", line 125, in _evaluate_stages
+    handler(stage, plan)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\evaluator.py", line 402, in visit_virtual_layer_update_stage
+    self._promote_snapshots(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\evaluator.py", line 437, in _promote_snapshots
+    self.snapshot_evaluator.promote(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\snapshot\evaluator.py", line 316, in promote
+    concurrent_apply_to_snapshots(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\concurrency.py", line 170, in concurrent_apply_to_snapshots
+    return concurrent_apply_to_dag(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\concurrency.py", line 212, in concurrent_apply_to_dag
+    ).run()
+      ^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\concurrency.py", line 64, in run
+    self._finished_future.result()
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+sqlmesh.utils.concurrency.NodeExecutionFailedError: Execution failed for node SnapshotId<"supermart"."products": 1589438501>
+2026-08-25 10:16:50,775 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)

@@ -1,0 +1,14 @@
+model_defaults:
+  dialect: mysql
+
+gateways:
+  local:
+    connection:
+      type: mysql
+      host: localhost
+      user: root
+      password: "Vedha2005@"
+      port: 3306
+      database: analytics
+
+default_gateway: local

@@ -1,0 +1,14 @@
+2026-08-25 10:43:23,526 - MainThread - sqlmesh.core.console - WARNING - This will permanently delete all engine-managed objects, state tables and SQLMesh cache.
+The operation may disrupt any currently running or scheduled plans.
+ (console.py:2335)
+2026-08-25 10:43:36,106 - MainThread - sqlmesh.core.state_sync.common - INFO - Processing batch of size 1 with end updated_ts=1787633606310 (janitor.py:163)
+2026-08-25 10:43:36,147 - ThreadPoolExecutor-0_0 - sqlmesh.core.engine_adapter.base - INFO - Executing SQL: DROP TABLE IF EXISTS `sqlmesh__supermart`.`supermart__products__1498494511__dev` (base.py:2624)
+2026-08-25 10:43:36,147 - ThreadPoolExecutor-0_0 - sqlmesh.core.snapshot.evaluator - INFO - Dropped table 'sqlmesh__supermart.supermart__products__1498494511__dev' (evaluator.py:2125)
+2026-08-25 10:43:36,147 - ThreadPoolExecutor-0_0 - sqlmesh.core.engine_adapter.base - INFO - Executing SQL: DROP TABLE IF EXISTS `sqlmesh__supermart`.`supermart__products__1498494511` (base.py:2624)
+2026-08-25 10:43:36,163 - ThreadPoolExecutor-0_0 - sqlmesh.core.snapshot.evaluator - INFO - Dropped table 'sqlmesh__supermart.supermart__products__1498494511' (evaluator.py:2125)
+2026-08-25 10:43:36,211 - MainThread - sqlmesh.core.state_sync.db.interval - INFO - Compacting 1 intervals for 1 snapshots (interval.py:130)
+2026-08-25 10:43:36,211 - MainThread - sqlmesh.core.state_sync.db.interval - INFO - Pushing intervals for snapshot SnapshotId<"supermart"."products": 1589438501> (interval.py:215)
+2026-08-25 10:43:36,231 - MainThread - sqlmesh.core.state_sync.common - INFO - Cleaned up expired snapshots batch (janitor.py:179)
+2026-08-25 10:43:36,239 - MainThread - sqlmesh.core.state_sync.common - INFO - Cleaned up 1 expired snapshots (janitor.py:181)
+2026-08-25 10:43:36,239 - MainThread - sqlmesh.core.state_sync.db.interval - INFO - Compacting 0 intervals for 0 snapshots (interval.py:130)
+2026-08-25 10:43:36,372 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)

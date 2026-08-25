@@ -1,6 +1,5 @@
 const billingModel = require("../models/billingModel");
 
-
 // Find customer by phone
 const getCustomerByPhone = (req, res) => {
 
@@ -12,11 +11,11 @@ const getCustomerByPhone = (req, res) => {
 
             if (err) {
 
-                console.log(err);
+                console.log("CUSTOMER ERROR:", err);
 
                 return res.status(500).json({
                     success: false,
-                    message: "Database Error"
+                    message: err.message
                 });
             }
 
@@ -28,7 +27,7 @@ const getCustomerByPhone = (req, res) => {
                 });
             }
 
-            res.json({
+            res.status(200).json({
                 success: true,
                 customer: result[0]
             });
@@ -45,15 +44,17 @@ const getProducts = (req, res) => {
 
             if (err) {
 
-                console.log(err);
+                console.log("BILLING PRODUCTS ERROR:", err);
 
                 return res.status(500).json({
                     success: false,
-                    message: "Database Error"
+                    message: err.message
                 });
             }
 
-            res.json({
+            console.log("BILLING PRODUCTS:", result);
+
+            res.status(200).json({
                 success: true,
                 products: result
             });
@@ -62,7 +63,7 @@ const getProducts = (req, res) => {
 };
 
 
-// Save bill
+// Create bill
 const createBill = (req, res) => {
 
     const {
@@ -73,7 +74,6 @@ const createBill = (req, res) => {
         items
     } = req.body;
 
-
     if (!customerId) {
 
         return res.status(400).json({
@@ -81,7 +81,6 @@ const createBill = (req, res) => {
             message: "Customer ID is required"
         });
     }
-
 
     if (!items || items.length === 0) {
 
@@ -91,8 +90,6 @@ const createBill = (req, res) => {
         });
     }
 
-
-    // Create Bill
     billingModel.createBill(
         customerId,
         total,
@@ -102,7 +99,7 @@ const createBill = (req, res) => {
 
             if (err) {
 
-                console.log("BILL INSERT ERROR:", err);
+                console.log("BILL ERROR:", err);
 
                 return res.status(500).json({
                     success: false,
@@ -110,11 +107,9 @@ const createBill = (req, res) => {
                 });
             }
 
-
             const billId = result.insertId;
 
             let completed = 0;
-
 
             items.forEach((item) => {
 
@@ -122,8 +117,6 @@ const createBill = (req, res) => {
                     Number(item.price) *
                     Number(item.quantity);
 
-
-                // Save Bill Item
                 billingModel.createBillItem(
                     billId,
                     item.productId,
@@ -134,7 +127,7 @@ const createBill = (req, res) => {
 
                         if (itemErr) {
 
-                            console.log("ITEM INSERT ERROR:", itemErr);
+                            console.log("BILL ITEM ERROR:", itemErr);
 
                             return res.status(500).json({
                                 success: false,
@@ -142,60 +135,19 @@ const createBill = (req, res) => {
                             });
                         }
 
+                        completed++;
 
-                        // Reduce Product Stock
-                        billingModel.reduceProductQuantity(
-                            item.productId,
-                            item.quantity,
-                            (stockErr, stockResult) => {
+                        if (completed === items.length) {
 
-                                if (stockErr) {
-
-                                    console.log(
-                                        "STOCK UPDATE ERROR:",
-                                        stockErr
-                                    );
-
-                                    return res.status(500).json({
-                                        success: false,
-                                        message: stockErr.message
-                                    });
-                                }
-
-
-                                // Check whether enough stock was available
-                                if (stockResult.affectedRows === 0) {
-
-                                    return res.status(400).json({
-                                        success: false,
-                                        message:
-                                            "Not enough stock available for this product"
-                                    });
-                                }
-
-
-                                completed++;
-
-
-                                // All items completed
-                                if (completed === items.length) {
-
-                                    res.status(201).json({
-                                        success: true,
-                                        message:
-                                            "Bill saved and stock updated successfully",
-                                        billId: billId
-                                    });
-                                }
-
-                            }
-                        );
-
+                            res.status(201).json({
+                                success: true,
+                                message: "Bill saved successfully",
+                                billId: billId
+                            });
+                        }
                     }
                 );
-
             });
-
         }
     );
 };
