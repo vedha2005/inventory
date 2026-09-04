@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/productcart.css";
 
 function Cart() {
+
+    const navigate = useNavigate();
 
     const [customers, setCustomers] = useState([]);
     const [customerSearch, setCustomerSearch] = useState("");
@@ -9,12 +12,12 @@ function Cart() {
 
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState("");
-    const [productId, setProductId] = useState("");
     const [price, setPrice] = useState("");
     const [quantity, setQuantity] = useState(1);
 
     const [billItems, setBillItems] = useState([]);
     const [paidAmount, setPaidAmount] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
 
     const [currentDate, setCurrentDate] = useState("");
     const [currentTime, setCurrentTime] = useState("");
@@ -161,13 +164,11 @@ function Cart() {
 
         if (product) {
 
-            setProductId(product.id);
             setPrice(product.price);
             setQuantity(1);
 
         } else {
 
-            setProductId("");
             setPrice("");
             setQuantity(1);
         }
@@ -234,7 +235,6 @@ function Cart() {
         ]);
 
         setSelectedProduct("");
-        setProductId("");
         setPrice("");
         setQuantity(1);
     };
@@ -274,6 +274,10 @@ function Cart() {
     // =========================
 
     const saveBill = async () => {
+
+        if (isSaving) {
+            return;
+        }
 
         if (!selectedCustomer) {
 
@@ -322,6 +326,8 @@ function Cart() {
             }))
         };
 
+        setIsSaving(true);
+
         try {
 
             const response = await fetch(
@@ -348,24 +354,7 @@ function Cart() {
                 );
             }
 
-            alert(
-                `Bill saved successfully!\nBill ID: ${data.billId}`
-            );
-
-            // Automatically clear bill
-            setSelectedCustomer(null);
-            setCustomerSearch("");
-
-            setSelectedProduct("");
-            setProductId("");
-            setPrice("");
-            setQuantity(1);
-
-            setBillItems([]);
-
-            setPaidAmount("");
-
-            loadProducts();
+            navigate(0);
 
         } catch (error) {
 
@@ -375,6 +364,22 @@ function Cart() {
                 "Failed to save bill: " +
                 error.message
             );
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleProductEnter = (event) => {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (selectedProduct) {
+            addProduct();
+        } else if (billItems.length > 0) {
+            saveBill();
         }
     };
 
@@ -384,7 +389,9 @@ function Cart() {
 
     return (
 
-        <div className="billing-container">
+        <div className="billing-page">
+
+            <div className="billing-container">
 
             {/* HEADER */}
 
@@ -558,7 +565,7 @@ function Cart() {
 
                         <input
                             type="text"
-                            value={productId}
+                            value={selectedProduct}
                             readOnly
                         />
 
@@ -573,6 +580,7 @@ function Cart() {
 
                         <select
                             value={selectedProduct}
+                            onKeyDown={handleProductEnter}
                             onChange={handleProductChange}
                         >
 
@@ -621,6 +629,7 @@ function Cart() {
                             type="number"
                             min="1"
                             value={quantity}
+                            onKeyDown={handleProductEnter}
                             onChange={(e) =>
                                 setQuantity(
                                     Number(e.target.value)
@@ -633,6 +642,7 @@ function Cart() {
 
                     <button
                         className="add-button"
+                        type="button"
                         onClick={addProduct}
                     >
                         ➕ Add
@@ -810,13 +820,18 @@ function Cart() {
 
 
                     <button
+                        type="button"
                         className="save-bill-button"
                         onClick={saveBill}
+                        onKeyDown={handleProductEnter}
+                        disabled={isSaving || !selectedCustomer || billItems.length === 0}
                     >
-                        💾 Save Bill
+                        {isSaving ? "Saving..." : "Enter - Save Bill"}
                     </button>
 
                 </div>
+
+            </div>
 
             </div>
 

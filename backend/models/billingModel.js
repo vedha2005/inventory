@@ -18,7 +18,7 @@ const getCustomerByPhone = (phone, callback) => {
 const getProducts = (callback) => {
 
     const sql = `
-        SELECT id, product_name, price, quantity
+        SELECT id, product_name, price, quantity, is_active
         FROM products
         WHERE is_active = TRUE
         ORDER BY id DESC
@@ -97,6 +97,7 @@ const reduceProductQuantity = (
         UPDATE products
         SET quantity = quantity - ?
         WHERE id = ?
+        AND is_active = TRUE
         AND quantity >= ?
     `;
 

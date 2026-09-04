@@ -63,6 +63,30 @@ const getProducts = (req, res) => {
 };
 
 
+const updateProduct = (req, res) => {
+    const { id } = req.params;
+    const { productName, price, quantity } = req.body;
+
+    if (!productName || price === undefined || quantity === undefined) {
+        return res.status(400).json({
+            success: false,
+            message: "Product name, price, and quantity are required"
+        });
+    }
+
+    productModel.updateProduct(id, productName, price, quantity, (err, result) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Product updated successfully" });
+    });
+};
+
 // Delete Product
 const deleteProduct = (req, res) => {
 
@@ -98,5 +122,6 @@ const deleteProduct = (req, res) => {
 module.exports = {
     addProduct,
     getProducts,
-    deleteProduct
+    deleteProduct,
+    updateProduct,
 };

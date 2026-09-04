@@ -11,12 +11,10 @@ router.get(
     dashboardController.getDashboardCounts
 );
 
-
 // Low stock products
 router.get(
     "/low-stock",
     dashboardController.getLowStockProducts
 );
-
 
 module.exports = router;

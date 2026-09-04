@@ -36,10 +36,21 @@ const deleteProduct = (id, callback) => {
 
 };
 
+const updateProduct = (id, productName, price, quantity, callback) => {
+    const sql = `
+        UPDATE products
+        SET product_name = ?, price = ?, quantity = ?
+        WHERE id = ? AND is_active = TRUE
+    `;
+
+    db.query(sql, [productName, price, quantity, id], callback);
+};
+
 
 
 module.exports = {
     addProduct,
     getProducts,
-    deleteProduct
+    deleteProduct,
+    updateProduct
 };

@@ -13,7 +13,7 @@ def eod_report():
     connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Vedha2005@",
+        password="#suganM@3009",
         database="supermart"
     )
 

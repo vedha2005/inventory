@@ -6,6 +6,7 @@ import Products from "./pages/products";
 import Cart from "./pages/cart";
 import Admin from "./pages/admin";
 import Customers from "./pages/customers";
+import Navbar from "./components/navbar";
 
 function ProtectedRoute({ children }) {
 
@@ -17,6 +18,15 @@ function ProtectedRoute({ children }) {
         return <Navigate to="/" />;
     }
 
+}
+
+function ProtectedLayout({ children }) {
+    return (
+        <div className="app-shell">
+            <Navbar />
+            <main className="page-content">{children}</main>
+        </div>
+    );
 }
 
 function App() {
@@ -35,7 +45,7 @@ function App() {
                     path="/admin"
                     element={
                         <ProtectedRoute>
-                            <Admin />
+                            <ProtectedLayout><Admin /></ProtectedLayout>
                         </ProtectedRoute>
                     }
                 />
@@ -45,7 +55,7 @@ function App() {
                     path="/home"
                     element={
                         <ProtectedRoute>
-                            <Home />
+                            <ProtectedLayout><Home /></ProtectedLayout>
                         </ProtectedRoute>
                     }
                 />
@@ -55,7 +65,7 @@ function App() {
                     path="/products"
                     element={
                         <ProtectedRoute>
-                            <Products />
+                            <ProtectedLayout><Products /></ProtectedLayout>
                         </ProtectedRoute>
                     }
                 />
@@ -65,7 +75,7 @@ function App() {
                     path="/customers"
                     element={
                         <ProtectedRoute>
-                            <Customers />
+                            <ProtectedLayout><Customers /></ProtectedLayout>
                         </ProtectedRoute>
                     }
                 />
@@ -75,7 +85,7 @@ function App() {
                     path="/cart"
                     element={
                         <ProtectedRoute>
-                            <Cart />
+                            <ProtectedLayout><Cart /></ProtectedLayout>
                         </ProtectedRoute>
                     }
                 />

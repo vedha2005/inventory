@@ -3,19 +3,26 @@ body {
 }
 
 .home-container {
-  height: calc(100vh - 70px); /* Adjust 70px to match your navbar height */
+  min-height: 55vh;
   display: flex;
   flex-direction: column;
   justify-content: center;   /* Vertical center */
   align-items: center;       /* Horizontal center */
   text-align: center;
+  padding: 30px;
+  border: 1px solid #e5dff0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff, #f4effd);
+  box-shadow: 0 14px 34px rgba(43, 43, 38, 0.08);
 }
 
 .home-container h1 {
-  font-size: 50px;
+  color: #272039;
+  font-size: clamp(34px, 6vw, 56px);
   margin-bottom: 15px;
 }
 
 .home-container p {
-  font-size: 25px;
+  color: #888881;
+  font-size: 18px;
 }

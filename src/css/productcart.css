@@ -2,204 +2,185 @@
     box-sizing: border-box;
 }
 
-.billing-page {
-    width: 100%;
-    min-height: 100vh;
-    background: #f4f4f4;
-    padding: 15px;
-    font-family: Arial, sans-serif;
+:root {
+    --billing-ink: #173f4f;
+    --billing-muted: #68777a;
+    --billing-accent: #e1a24a;
+    --billing-line: #dbe3e1;
 }
 
+.billing-page {
+    min-height: 100vh;
+    padding: 32px;
+    background: linear-gradient(135deg, #edf3f1, #f8faf8 55%, #e9efed);
+    color: var(--billing-ink);
+}
 
-/* =========================
-   HEADER
-========================= */
+.billing-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid rgba(23, 63, 79, .12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 24px 60px rgba(23, 63, 79, .12);
+}
 
 .billing-header {
-    background: white;
-    border-radius: 10px;
-    padding: 20px 30px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+    min-height: 112px;
+    margin-bottom: 28px;
+    padding: 24px 30px;
+    border-radius: 10px;
+    background: linear-gradient(120deg, #173f4f, #286477);
 }
 
-.billing-title {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.billing-title h1 {
-    font-size: 46px;
+.billing-header h1 {
     margin: 0;
-    color: #111;
-}
-
-.billing-icon {
-    font-size: 50px;
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 3rem);
 }
 
 .date-time {
-    font-size: 18px;
-    line-height: 2;
-    text-align: left;
+    color: #eaf2f0;
+    font-size: 14px;
+    line-height: 1.8;
+    text-align: right;
 }
 
-
-/* =========================
-   SECTIONS
-========================= */
+.billing-section,
+.calculation-container,
+.bill-table-container {
+    border: 1px solid var(--billing-line);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(23, 63, 79, .06);
+}
 
 .billing-section {
-    background: white;
-    border-radius: 10px;
-    padding: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
+    padding: 24px;
 }
 
 .billing-section h2,
-.calculation-box h2 {
-    color: #2e7d32;
+.calculation-container h2 {
     margin-top: 0;
-    margin-bottom: 25px;
-    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--billing-ink);
+    font-size: 1.35rem;
 }
 
-
-/* =========================
-   CUSTOMER FIELDS
-========================= */
-
-.customer-fields {
+.customer-grid,
+.product-grid {
     display: grid;
-    grid-template-columns:
-        1fr 1fr 1fr 1fr;
-
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 18px;
 }
 
-.field {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.field label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.field input,
-.field select {
-    width: 100%;
-    height: 50px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px 14px;
-    font-size: 16px;
-    background: white;
-}
-
-.field input:read-only {
-    background: #f1f1f1;
-}
-
-
-/* =========================
-   CUSTOMER SEARCH
-========================= */
-
-.customer-dropdown {
-    position: absolute;
-    top: 82px;
-    left: 0;
-    width: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    z-index: 1000;
-    max-height: 220px;
-    overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.customer-option {
-    padding: 12px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.customer-option:hover {
-    background: #e8f5e9;
-}
-
-.customer-option span {
-    color: #666;
-    font-size: 14px;
-}
-
-.no-customer {
-    padding: 15px;
-    color: #777;
-}
-
-
-/* =========================
-   PRODUCT FIELDS
-========================= */
-
-.product-fields {
-    display: grid;
-    grid-template-columns:
-        1fr 1.4fr 1fr 1fr 130px;
-
-    gap: 18px;
-
+.product-grid {
+    grid-template-columns: 1fr 1.5fr 1fr 1fr auto;
     align-items: end;
 }
 
-.add-product-btn {
-    height: 50px;
-    background: #2e7d32;
-    color: white;
-    border: none;
+.form-group,
+.customer-search {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: var(--billing-muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.billing-container input,
+.billing-container select {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid var(--billing-line);
+    border-radius: 7px;
+    outline: 0;
+    padding: 10px 12px;
+    background: #fbfdfc;
+    color: #26383d;
+}
+
+.billing-container input:focus,
+.billing-container select:focus {
+    border-color: var(--billing-accent);
+    box-shadow: 0 0 0 3px rgba(225, 162, 74, .2);
+}
+
+.billing-container input:read-only {
+    background: #f0f5f3;
+    color: var(--billing-ink);
+    font-weight: 700;
+}
+
+.customer-dropdown {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid #c8d4d1;
     border-radius: 6px;
-    font-size: 17px;
-    font-weight: bold;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+}
+
+.customer-option {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #edf1f0;
     cursor: pointer;
 }
 
-.add-product-btn:hover {
-    background: #256628;
+.customer-option:hover {
+    background: #f7faf8;
 }
 
+.customer-option span,
+.no-customer {
+    color: var(--billing-muted);
+}
 
-/* =========================
-   BOTTOM AREA
-========================= */
+.add-button,
+.save-bill-button {
+    border: 0;
+    border-radius: 7px;
+    background: var(--billing-accent);
+    color: var(--billing-ink);
+    cursor: pointer;
+    font-weight: 800;
+}
 
-.billing-bottom {
+.add-button {
+    min-height: 46px;
+    padding: 0 18px;
+}
+
+.bill-bottom {
     display: grid;
-    grid-template-columns: 60% 40%;
-    gap: 30px;
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, .8fr);
+    gap: 24px;
     align-items: start;
 }
 
-
-/* =========================
-   TABLE
-========================= */
-
 .bill-table-container {
-    background: white;
     min-height: 250px;
-    overflow-x: auto;
+    overflow: hidden;
 }
 
 .bill-table-container table {
@@ -208,135 +189,118 @@
 }
 
 .bill-table-container th {
-    background: #2e7d32;
-    color: white;
-    padding: 16px 10px;
-    font-size: 17px;
+    padding: 14px 10px;
+    background: var(--billing-ink);
+    color: #fff;
+    font-size: 12px;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .bill-table-container td {
     padding: 14px 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #edf1f0;
+    color: #304b53;
+    font-size: 14px;
     text-align: center;
-    font-size: 16px;
-}
-
-.bill-table-container tbody tr:hover {
-    background: #f5f5f5;
 }
 
 .no-products {
     height: 120px;
-    color: #777;
-    font-size: 18px !important;
+    color: var(--billing-muted) !important;
 }
 
-
-/* =========================
-   DELETE BUTTON
-========================= */
-
-.delete-item-btn {
-    border: none;
-    background: transparent;
+.delete-button {
+    border: 1px solid #e3b2a9;
+    border-radius: 6px;
+    padding: 7px 10px;
+    background: #fff7f5;
+    color: #a44838;
     cursor: pointer;
-    font-size: 17px;
+    font-size: 12px;
+    font-weight: 700;
 }
 
-
-/* =========================
-   CALCULATION
-========================= */
-
-.calculation-box {
-    background: white;
-    border-radius: 10px;
-    padding: 30px;
+.calculation-container {
+    padding: 24px;
 }
 
 .calculation-row {
     display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 15px;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 12px;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .calculation-row label {
-    font-size: 18px;
-    font-weight: bold;
+    color: var(--billing-muted);
+    font-size: 13px;
+    font-weight: 700;
 }
 
-.calculation-row input {
-    height: 50px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 17px;
-}
-
-.save-bill-btn {
+.save-bill-button {
     width: 100%;
-    height: 55px;
-    background: #2e7d32;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 19px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+    min-height: 50px;
+    margin-top: 8px;
+    font-size: 15px;
 }
 
-.save-bill-btn:hover {
-    background: #256628;
+.save-bill-button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
 }
 
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 1000px) {
-
-    .customer-fields {
-        grid-template-columns: 1fr 1fr;
+@media (max-width: 900px) {
+    .billing-page {
+        padding: 16px;
     }
 
-    .product-fields {
-        grid-template-columns: 1fr 1fr;
+    .billing-container {
+        padding: 18px;
     }
 
-    .billing-bottom {
+    .customer-grid,
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .product-grid .add-button {
+        grid-column: 1 / -1;
+    }
+
+    .bill-bottom {
         grid-template-columns: 1fr;
     }
-
 }
-
 
 @media (max-width: 600px) {
-
-    .customer-fields {
-        grid-template-columns: 1fr;
-    }
-
-    .product-fields {
-        grid-template-columns: 1fr;
-    }
-
     .billing-header {
-        flex-direction: column;
         align-items: flex-start;
+        flex-direction: column;
         gap: 15px;
+        padding: 20px;
     }
 
-    .billing-title h1 {
-        font-size: 35px;
+    .date-time {
+        text-align: left;
     }
 
+    .customer-grid,
+    .product-grid,
     .calculation-row {
         grid-template-columns: 1fr;
     }
 
+    .product-grid .add-button {
+        grid-column: auto;
+    }
+
+    .bill-table-container {
+        overflow-x: auto;
+    }
+
+    .bill-table-container table {
+        min-width: 620px;
+    }
 }

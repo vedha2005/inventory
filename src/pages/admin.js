@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "../css/admin.css";
 
 function Admin() {
@@ -46,50 +46,14 @@ function Admin() {
 
         <div className="admin-container">
 
-            {/* Navigation */}
-
-            <nav className="dashboard-nav">
-
-                <h2>🛒 SuperMart</h2>
-
-                <div className="nav-buttons">
-
-                    <Link to="/admin">
-                        Dashboard
-                    </Link>
-
-                    <Link to="/products">
-                        Products
-                    </Link>
-
-                    <Link to="/customers">
-                        Customers
-                    </Link>
-
-                    <Link to="/cart">
-                        Billing
-                    </Link>
-
-                    <button
-                        onClick={() => {
-
-                            localStorage.removeItem("isLoggedIn");
-
-                            window.location.href = "/";
-
-                        }}
-                    >
-                        Logout
-                    </button>
-
-                </div>
-
-            </nav>
-
-
             {/* Dashboard */}
 
             <h1>SuperMart Dashboard</h1>
+            <nav className="dashboard-nav" aria-label="Dashboard navigation">
+                <Link to="/products">Products</Link>
+                <Link to="/customers">Customers</Link>
+                <Link to="/cart">New Bill</Link>
+            </nav>
 
 
             <div className="dashboard-cards">
@@ -181,6 +145,43 @@ function Admin() {
                 )}
 
             </div>
+
+            <section className="stock-chart" aria-labelledby="stock-chart-title">
+                <div className="section-heading">
+                    <div>
+                        <p className="section-kicker">Inventory health</p>
+                        <h2 id="stock-chart-title">Low-stock overview</h2>
+                    </div>
+                    <span className="chart-unit">Units left</span>
+                </div>
+
+                {lowStockProducts.length === 0 ? (
+                    <p className="chart-empty">No low-stock products to chart.</p>
+                ) : (
+                    <div className="stock-bars">
+                        {lowStockProducts.map((product) => {
+                            const maximumStock = Math.max(
+                                ...lowStockProducts.map(item => Number(item.quantity)),
+                                10
+                            );
+                            const barWidth = Math.max(
+                                (Number(product.quantity) / maximumStock) * 100,
+                                6
+                            );
+
+                            return (
+                                <div className="stock-bar-row" key={product.id}>
+                                    <span className="stock-bar-label">{product.product_name}</span>
+                                    <div className="stock-bar-track">
+                                        <span className="stock-bar-fill" style={{ width: `${barWidth}%` }} />
+                                    </div>
+                                    <strong>{product.quantity}</strong>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </section>
 
         </div>
 

@@ -3,55 +3,190 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f4f4f4;
+    padding: 24px;
+    background: #eeeaf7;
 }
 
 .login-box {
-    width: 350px;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    position: relative;
+    width: min(100%, 1100px);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 18px 50px rgba(43, 43, 38, 0.14);
+}
+
+.login-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 42%;
+    height: 100%;
+    margin-left: auto;
+    padding: 56px 52px;
+    background: transparent;
+}
+
+.login-brand {
+    margin-bottom: 52px;
+    color: #6e3bd1;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
 }
 
 .login-box h2 {
-    text-align: center;
-    margin-bottom: 20px;
+    margin: 0;
+    color: #272039;
+    font-size: 38px;
+    line-height: 1;
+}
+
+.login-subtitle {
+    margin: 12px 0 42px;
+    color: #888881;
+    font-size: 14px;
+}
+
+.login-error,
+.field-error {
+    color: #c03952;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.login-error {
+    margin: -20px 0 26px;
+    padding: 11px 13px;
+    border: 1px solid #f1c4ce;
+    border-radius: 6px;
+    background: #fff3f5;
+}
+
+.login-box label {
+    margin: 0 0 8px;
+    color: #878780;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .login-box input {
+    box-sizing: border-box;
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 12px 2px;
+    margin-bottom: 25px;
+    border: 0;
+    border-bottom: 1px solid #deded8;
+    border-radius: 0;
+    font-size: 14px;
     outline: none;
+    background: transparent;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .login-box input:focus {
-    border-color: #2E7D32;
+    border-color: #6e3bd1;
+    box-shadow: 0 2px 0 #6e3bd1;
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 36px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0;
+    bottom: 25px;
+    border: 0;
+    padding: 4px;
+    background: transparent;
+    color: #878780;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+    color: #6e3bd1;
+}
+
+.login-box input.input-error {
+    border-color: #d45168;
+    box-shadow: 0 2px 0 #d45168;
+}
+
+.field-error {
+    display: block;
+    margin: -18px 0 18px;
+}
+
+.login-btn {
+    display: block;
+    width: 100%;
+    margin: 18px auto 0;
+    background: #6e3bd1;
+    color: white;
+    border: none;
+    padding: 15px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 18px rgba(110, 59, 209, 0.25);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover {
+    background: #5726b5;
+    box-shadow: 0 10px 22px rgba(110, 59, 209, 0.35);
+    transform: translateY(-2px);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-image {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    background: #32105e;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(0.8) contrast(1.08);
+}
+
+.image-tint {
+    display: none;
+}
+
+.image-copy {
+    display: none;
 }
 
 .login-buttons {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-}
-
-.login-btn {
-    flex: 1;
-    background: #2E7D32;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.login-btn:hover {
-    background: #256428;
 }
 
 .reset-btn {
@@ -67,4 +202,31 @@
 
 .reset-btn:hover {
     background: #d32f2f;
+}
+
+@media (max-width: 700px) {
+    .login-container {
+        padding: 16px;
+    }
+
+    .login-box {
+        display: block;
+        aspect-ratio: auto;
+        min-height: 0;
+    }
+
+    .login-content {
+        width: 100%;
+        min-height: 510px;
+        background: rgba(255, 255, 255, 0.97);
+        padding: 36px 28px 40px;
+    }
+
+    .login-brand {
+        margin-bottom: 38px;
+    }
+
+    .login-image {
+        min-height: 100%;
+    }
 }
