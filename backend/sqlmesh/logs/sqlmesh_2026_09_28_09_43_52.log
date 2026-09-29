@@ -1,0 +1,2 @@
+2026-09-28 09:43:54,000 - MainThread - sqlmesh.core.console - WARNING - Cannot restate model '"analytics"."daily_sales"' because the current version is used in production. Run the restatement against the production environment instead to restate this model. (console.py:2335)
+2026-09-28 09:43:54,013 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)

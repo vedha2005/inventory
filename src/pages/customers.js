@@ -1,8 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../css/customers.css";
 
 function Customers() {
+
+    // ==========================
+    // User Role / Branch
+    // ==========================
+
+    const role = localStorage.getItem("role");
+    const branchId = localStorage.getItem("branch_id");
+
+    const getHeaders = () => {
+
+        const headers = {
+            "x-role": role
+        };
+
+        if (branchId) {
+            headers["x-branch-id"] = branchId;
+        }
+
+        return headers;
+    };
+
+
+    // ==========================
+    // State
+    // ==========================
 
     const [showForm, setShowForm] = useState(false);
 
@@ -13,32 +38,53 @@ function Customers() {
 
     const [customers, setCustomers] = useState([]);
 
-    // Get customers from MySQL
-    const getCustomers = async () => {
+
+    // ==========================
+    // Get Customers
+    // ==========================
+
+    const getCustomers = useCallback(async () => {
 
         try {
 
             const res = await axios.get(
-                "http://localhost:5000/api/customers"
+                "http://localhost:5000/api/customers",
+                {
+                    headers: getHeaders()
+                }
             );
 
             setCustomers(res.data);
 
         } catch (err) {
 
-            console.log(err);
-            alert("Failed to load customers");
+            console.log("GET CUSTOMERS ERROR:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to load customers"
+            );
 
         }
 
-    };
+    }, [role, branchId]);
 
-    // Load customers when page opens
+
+    // ==========================
+    // Load Customers
+    // ==========================
+
     useEffect(() => {
-        getCustomers();
-    }, []);
 
-    // Add customer
+        getCustomers();
+
+    }, [getCustomers]);
+
+
+    // ==========================
+    // Add Customer
+    // ==========================
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -52,6 +98,9 @@ function Customers() {
                     phone,
                     email,
                     address
+                },
+                {
+                    headers: getHeaders()
                 }
             );
 
@@ -68,40 +117,64 @@ function Customers() {
 
         } catch (err) {
 
-            console.log(err);
-            alert("Failed to add customer");
+            console.log("ADD CUSTOMER ERROR:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to add customer"
+            );
 
         }
 
     };
 
-    // Delete customer
+
+    // ==========================
+    // Delete Customer
+    // ==========================
+
     const deleteCustomer = async (id) => {
 
         try {
 
             const res = await axios.delete(
-                `http://localhost:5000/api/customers/${id}`
+                `http://localhost:5000/api/customers/${id}`,
+                {
+                    headers: getHeaders()
+                }
             );
 
             alert(res.data.message);
 
+            // Refresh customer list
             getCustomers();
 
         } catch (err) {
 
-            console.log(err);
-            alert("Failed to delete customer");
+            console.log("DELETE CUSTOMER ERROR:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to delete customer"
+            );
 
         }
 
     };
+
+
+    // ==========================
+    // UI
+    // ==========================
 
     return (
 
         <div className="customers-container">
 
             <h1>Customer Management</h1>
+
+
+            {/* Add Customer Button */}
 
             {!showForm && (
 
@@ -113,6 +186,9 @@ function Customers() {
                 </button>
 
             )}
+
+
+            {/* Customer Form */}
 
             {showForm && (
 
@@ -131,6 +207,7 @@ function Customers() {
                         required
                     />
 
+
                     <input
                         type="text"
                         placeholder="Phone Number"
@@ -141,6 +218,7 @@ function Customers() {
                         required
                     />
 
+
                     <input
                         type="email"
                         placeholder="Email"
@@ -150,6 +228,7 @@ function Customers() {
                         }
                     />
 
+
                     <textarea
                         placeholder="Address"
                         value={address}
@@ -157,6 +236,7 @@ function Customers() {
                             setAddress(e.target.value)
                         }
                     />
+
 
                     <div className="btn-group">
 
@@ -166,6 +246,7 @@ function Customers() {
                         >
                             Save Customer
                         </button>
+
 
                         <button
                             type="button"
@@ -181,38 +262,62 @@ function Customers() {
 
             )}
 
+
+            {/* Customer List */}
+
             <h2>Added Customers</h2>
+
 
             <table className="customers-table">
 
                 <thead>
 
                     <tr>
+
                         <th>ID</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
                         <th>Address</th>
                         <th>Action</th>
+
                     </tr>
 
                 </thead>
+
 
                 <tbody>
 
                     {customers.map((customer) => (
 
-                        <tr key={customer.customer_id}>
+                        <tr
+                            key={customer.customer_id}
+                        >
 
-                            <td>{customer.customer_id}</td>
+                            <td>
+                                {customer.customer_id}
+                            </td>
 
-                            <td>{customer.customer_name}</td>
 
-                            <td>{customer.phone}</td>
+                            <td>
+                                {customer.customer_name}
+                            </td>
 
-                            <td>{customer.email}</td>
 
-                            <td>{customer.address}</td>
+                            <td>
+                                {customer.phone}
+                            </td>
+
+
+                            <td>
+                                {customer.email}
+                            </td>
+
+
+                            <td>
+                                {customer.address}
+                            </td>
+
 
                             <td>
 
@@ -232,6 +337,22 @@ function Customers() {
                         </tr>
 
                     ))}
+
+
+                    {customers.length === 0 && (
+
+                        <tr>
+
+                            <td
+                                colSpan="6"
+                                className="table-message"
+                            >
+                                No customers found.
+                            </td>
+
+                        </tr>
+
+                    )}
 
                 </tbody>
 

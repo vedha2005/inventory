@@ -1,0 +1,24 @@
+2026-09-01 09:58:20,724 - MainThread - sqlmesh.core.context - INFO - Plan application failed. (context.py:1808)
+Traceback (most recent call last):
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\context.py", line 1800, in apply
+    self._apply(plan, circuit_breaker)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\context.py", line 2593, in _apply
+    self._scheduler.create_plan_evaluator(self).evaluate(
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\evaluator.py", line 104, in evaluate
+    plan_stages = stages.build_plan_stages(plan, self.state_sync, self.default_catalog)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\stages.py", line 703, in build_plan_stages
+    return PlanStagesBuilder(state_reader, default_catalog).build(plan)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\stages.py", line 288, in build
+    snapshots_to_intervals = self._missing_intervals(
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\plan\stages.py", line 577, in _missing_intervals
+    return merged_missing_intervals(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\core\scheduler.py", line 1055, in merged_missing_intervals
+    validate_date_range(start, end)
+  File "C:\Users\LakshmiVedha\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlmesh\utils\date.py", line 366, in validate_date_range
+    raise ValueError(
+ValueError: Start date / time (2026-08-31 00:00:00+00:00) can't be greater than end date / time (1787616000000)
+2026-09-01 09:58:20,745 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)

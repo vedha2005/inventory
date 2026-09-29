@@ -1,33 +1,30 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate
+} from "react-router-dom";
 
 import Login from "./pages/login";
-import Home from "./pages/home";
+import Admin from "./pages/admin";
 import Products from "./pages/products";
 import Cart from "./pages/cart";
-import Admin from "./pages/admin";
 import Customers from "./pages/customers";
-import Navbar from "./components/navbar";
+import SalesPrediction from "./pages/salesprediction";
+import Analytics from "./pages/analytics";
+
 
 function ProtectedRoute({ children }) {
 
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const isLoggedIn =
+        localStorage.getItem("isLoggedIn") === "true";
 
-    if (isLoggedIn === "true") {
-        return children;
-    } else {
-        return <Navigate to="/" />;
-    }
-
+    return isLoggedIn
+        ? children
+        : <Navigate to="/" replace />;
 }
 
-function ProtectedLayout({ children }) {
-    return (
-        <div className="app-shell">
-            <Navbar />
-            <main className="page-content">{children}</main>
-        </div>
-    );
-}
 
 function App() {
 
@@ -37,56 +34,87 @@ function App() {
 
             <Routes>
 
-                {/* Login */}
-                <Route path="/" element={<Login />} />
+                {/* LOGIN */}
+                <Route
+                    path="/"
+                    element={<Login />}
+                />
 
-                {/* Dashboard */}
+
+                {/* DASHBOARD */}
                 <Route
                     path="/admin"
                     element={
                         <ProtectedRoute>
-                            <ProtectedLayout><Admin /></ProtectedLayout>
+                            <Admin />
                         </ProtectedRoute>
                     }
                 />
 
-                {/* Home */}
-                <Route
-                    path="/home"
-                    element={
-                        <ProtectedRoute>
-                            <ProtectedLayout><Home /></ProtectedLayout>
-                        </ProtectedRoute>
-                    }
-                />
 
-                {/* Products */}
+                {/* PRODUCTS */}
                 <Route
                     path="/products"
                     element={
                         <ProtectedRoute>
-                            <ProtectedLayout><Products /></ProtectedLayout>
+                            <Products />
                         </ProtectedRoute>
                     }
                 />
 
-                {/* Customers */}
+
+                {/* CUSTOMERS */}
                 <Route
                     path="/customers"
                     element={
                         <ProtectedRoute>
-                            <ProtectedLayout><Customers /></ProtectedLayout>
+                            <Customers />
                         </ProtectedRoute>
                     }
                 />
 
-                {/* Billing */}
+
+                {/* BILLING */}
                 <Route
                     path="/cart"
                     element={
                         <ProtectedRoute>
-                            <ProtectedLayout><Cart /></ProtectedLayout>
+                            <Cart />
                         </ProtectedRoute>
+                    }
+                />
+
+
+                {/* SALES PREDICTION */}
+                <Route
+                    path="/sales-prediction"
+                    element={
+                        <ProtectedRoute>
+                            <SalesPrediction />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ANALYTICS */}
+                <Route
+                    path="/analytics"
+                    element={
+                        <ProtectedRoute>
+                            <Analytics />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* UNKNOWN URL */}
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to="/"
+                            replace
+                        />
                     }
                 />
 
@@ -95,7 +123,6 @@ function App() {
         </BrowserRouter>
 
     );
-
 }
 
 export default App;

@@ -1,46 +1,152 @@
 const db = require("../config/db");
 
 
-// Find customer using phone
+// =====================================================
+// FIND CUSTOMER BY PHONE
+// =====================================================
+
 const getCustomerByPhone = (phone, callback) => {
 
     const sql = `
-        SELECT customer_id, customer_name, phone, email, address
+        SELECT
+            customer_id,
+            customer_name,
+            phone,
+            email,
+            address
         FROM customers
         WHERE phone = ?
+        LIMIT 1
     `;
 
-    db.query(sql, [phone], callback);
+    db.query(
+        sql,
+        [phone],
+        callback
+    );
 };
 
 
-// Get products
-const getProducts = (callback) => {
+// =====================================================
+// GET PRODUCTS FOR BILLING
+// =====================================================
+//
+// Branch User:
+// Shows ALL products
+// Shows stock belonging to logged-in branch
+//
+// Super Admin:
+// Shows ALL products
+// Shows stock for ALL branches
+// =====================================================
 
-    const sql = `
-        SELECT id, product_name, price, quantity, is_active
-        FROM products
-        WHERE is_active = TRUE
-        ORDER BY id DESC
-    `;
+const getProducts = (
+    branchId,
+    isSuperAdmin,
+    callback
+) => {
 
-    db.query(sql, callback);
+    let sql;
+    let values = [];
+
+
+    // =================================================
+    // SUPER ADMIN
+    // =================================================
+
+    if (isSuperAdmin) {
+
+        sql = `
+            SELECT
+                p.id,
+                p.product_name,
+                p.price,
+                p.is_active,
+                bp.branch_id,
+                b.branch_name,
+                bp.quantity
+            FROM products p
+
+            LEFT JOIN branch_products bp
+                ON p.id = bp.product_id
+
+            LEFT JOIN branches b
+                ON bp.branch_id = b.branch_id
+
+            WHERE p.is_active = TRUE
+
+            ORDER BY p.id DESC
+        `;
+
+    }
+
+
+    // =================================================
+    // BRANCH USER
+    // =================================================
+
+    else {
+
+        sql = `
+            SELECT
+                p.id,
+                p.product_name,
+                p.price,
+                p.is_active,
+                bp.branch_id,
+                b.branch_name,
+                bp.quantity
+            FROM products p
+
+            INNER JOIN branch_products bp
+                ON p.id = bp.product_id
+
+            INNER JOIN branches b
+                ON bp.branch_id = b.branch_id
+
+            WHERE p.is_active = TRUE
+            AND bp.branch_id = ?
+
+            ORDER BY p.id DESC
+        `;
+
+        values = [branchId];
+    }
+
+
+    // No unnecessary console.log here
+
+    db.query(
+        sql,
+        values,
+        callback
+    );
 };
 
 
-// Create bill
+// =====================================================
+// CREATE BILL
+// =====================================================
+
 const createBill = (
     customerId,
     total,
     paidAmount,
     returnAmount,
+    branchId,
     callback
 ) => {
 
     const sql = `
         INSERT INTO bills
-        (customer_id, total, paid_amount, return_amount)
-        VALUES (?, ?, ?, ?)
+        (
+            customer_id,
+            total,
+            paid_amount,
+            return_amount,
+            branch_id
+        )
+        VALUES (?, ?, ?, ?, ?)
     `;
 
     db.query(
@@ -49,14 +155,18 @@ const createBill = (
             customerId,
             total,
             paidAmount,
-            returnAmount
+            returnAmount,
+            branchId
         ],
         callback
     );
 };
 
 
-// Create bill item
+// =====================================================
+// CREATE BILL ITEM
+// =====================================================
+
 const createBillItem = (
     billId,
     productId,
@@ -68,7 +178,13 @@ const createBillItem = (
 
     const sql = `
         INSERT INTO bill_items
-        (bill_id, product_id, quantity, price, item_total)
+        (
+            bill_id,
+            product_id,
+            quantity,
+            price,
+            item_total
+        )
         VALUES (?, ?, ?, ?, ?)
     `;
 
@@ -86,18 +202,22 @@ const createBillItem = (
 };
 
 
-// Reduce product stock
-const reduceProductQuantity = (
+// =====================================================
+// REDUCE BRANCH PRODUCT STOCK
+// =====================================================
+
+const reduceBranchProductQuantity = (
     productId,
+    branchId,
     quantity,
     callback
 ) => {
 
     const sql = `
-        UPDATE products
+        UPDATE branch_products
         SET quantity = quantity - ?
-        WHERE id = ?
-        AND is_active = TRUE
+        WHERE product_id = ?
+        AND branch_id = ?
         AND quantity >= ?
     `;
 
@@ -106,6 +226,7 @@ const reduceProductQuantity = (
         [
             quantity,
             productId,
+            branchId,
             quantity
         ],
         callback
@@ -113,10 +234,54 @@ const reduceProductQuantity = (
 };
 
 
+// =====================================================
+// CHECK BRANCH PRODUCT STOCK
+// =====================================================
+
+const getBranchProductStock = (
+    productId,
+    branchId,
+    callback
+) => {
+
+    const sql = `
+        SELECT
+            product_id,
+            branch_id,
+            quantity
+        FROM branch_products
+        WHERE product_id = ?
+        AND branch_id = ?
+        LIMIT 1
+    `;
+
+    db.query(
+        sql,
+        [
+            productId,
+            branchId
+        ],
+        callback
+    );
+};
+
+
+// =====================================================
+// EXPORT
+// =====================================================
+
 module.exports = {
+
     getCustomerByPhone,
+
     getProducts,
+
     createBill,
+
     createBillItem,
-    reduceProductQuantity
+
+    reduceBranchProductQuantity,
+
+    getBranchProductStock
+
 };

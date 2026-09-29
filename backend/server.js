@@ -6,6 +6,8 @@ const productRoutes = require("./routes/productRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const billingRoutes = require("./routes/billingRoutes");
+const ownerPredictionRoutes = require("./routes/ownerPredictionRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/billing", billingRoutes);
+app.use("/api/owner-prediction", ownerPredictionRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 
 // Test
