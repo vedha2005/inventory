@@ -230,3 +230,46 @@
         min-height: 100%;
     }
 }
+
+/* ===== Neumorphism style override - style only ===== */
+.login-container {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e9e6f3;
+}
+.login-box {
+    border-radius: 24px;
+    background: #e9e6f3;
+    box-shadow: 16px 16px 32px rgba(163, 157, 183, .45),
+                -16px -16px 32px rgba(255, 255, 255, .9);
+}
+.login-content {
+    background: #e9e6f3;
+}
+.login-brand { color: #6e3bd1; }
+.login-box h2 { color: #29263a; }
+.login-subtitle { color: #706c7c; }
+
+.login-box input {
+    border: 0;
+    border-radius: 10px;
+    padding: 13px 14px;
+    background: #e9e6f3;
+    box-shadow: inset 3px 3px 7px rgba(163, 157, 183, .35),
+                inset -3px -3px 7px rgba(255, 255, 255, .8);
+}
+.login-box input:focus {
+    border: 0;
+    box-shadow: inset 2px 2px 5px rgba(163, 157, 183, .3),
+                inset -2px -2px 5px rgba(255, 255, 255, .8);
+}
+.login-btn {
+    border-radius: 12px;
+    background: #6e3bd1;
+    box-shadow: 6px 6px 12px rgba(163, 157, 183, .45),
+                -4px -4px 10px rgba(255, 255, 255, .8);
+}
+.login-btn:hover { background: #5d2fc0; }
+.reset-btn {
+    border-radius: 10px;
+    box-shadow: 4px 4px 9px rgba(163, 157, 183, .4);
+}

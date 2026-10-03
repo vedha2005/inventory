@@ -38,3 +38,41 @@
     cursor: pointer;
 }
 @media (max-width: 700px) { .customers-container { padding: 20px 14px; overflow-x: auto; } .customer-form { grid-template-columns: 1fr; } }
+
+/* ===== Neumorphism style override - style only ===== */
+.customers-container {
+    font-family: "Segoe UI", Arial, sans-serif;
+    border: 0;
+    border-radius: 20px;
+    background: #e9e6f3;
+    box-shadow: 12px 12px 24px rgba(163, 157, 183, .45),
+                -12px -12px 24px rgba(255, 255, 255, .88);
+    color: #29263a;
+}
+.customers-container h1 { color: #29263a; }
+.customers-container h2 { color: #6e3bd1; }
+
+.customer-form input,
+.customer-form textarea {
+    border: 0;
+    border-radius: 10px;
+    background: #e9e6f3;
+    box-shadow: inset 3px 3px 7px rgba(163, 157, 183, .35),
+                inset -3px -3px 7px rgba(255, 255, 255, .8);
+}
+.customers-table {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #e9e6f3;
+    box-shadow: 8px 8px 18px rgba(163, 157, 183, .35),
+                -8px -8px 18px rgba(255, 255, 255, .8);
+}
+.customers-table th {
+    background: #6e3bd1;
+    color: #fff;
+}
+.customers-table td { background: #eeeaf7; }
+.delete-btn {
+    border-radius: 10px;
+    box-shadow: 3px 3px 7px rgba(163, 157, 183, .4);
+}

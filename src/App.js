@@ -6,6 +6,8 @@ import {
     Navigate
 } from "react-router-dom";
 
+import Navbar from "./components/navbar";
+
 import Login from "./pages/login";
 import Admin from "./pages/admin";
 import Products from "./pages/products";
@@ -13,7 +15,9 @@ import Cart from "./pages/cart";
 import Customers from "./pages/customers";
 import SalesPrediction from "./pages/salesprediction";
 import Analytics from "./pages/analytics";
-
+// =========================================================
+// PROTECTED ROUTE
+// =========================================================
 
 function ProtectedRoute({ children }) {
 
@@ -26,22 +30,44 @@ function ProtectedRoute({ children }) {
 }
 
 
+// =========================================================
+// APP
+// =========================================================
+
 function App() {
 
     return (
 
         <BrowserRouter>
 
+            {/* =================================================
+                NAVBAR
+                Previous / Next + Logout
+               ================================================= */}
+
+            <Navbar />
+
+
+            {/* =================================================
+                ROUTES
+               ================================================= */}
+
             <Routes>
 
-                {/* LOGIN */}
+                {/* =================================================
+                    LOGIN
+                   ================================================= */}
+
                 <Route
                     path="/"
                     element={<Login />}
                 />
 
 
-                {/* DASHBOARD */}
+                {/* =================================================
+                    DASHBOARD
+                   ================================================= */}
+
                 <Route
                     path="/admin"
                     element={
@@ -52,7 +78,10 @@ function App() {
                 />
 
 
-                {/* PRODUCTS */}
+                {/* =================================================
+                    PRODUCTS
+                   ================================================= */}
+
                 <Route
                     path="/products"
                     element={
@@ -63,7 +92,10 @@ function App() {
                 />
 
 
-                {/* CUSTOMERS */}
+                {/* =================================================
+                    CUSTOMERS
+                   ================================================= */}
+
                 <Route
                     path="/customers"
                     element={
@@ -74,7 +106,10 @@ function App() {
                 />
 
 
-                {/* BILLING */}
+                {/* =================================================
+                    BILLING
+                   ================================================= */}
+
                 <Route
                     path="/cart"
                     element={
@@ -85,18 +120,10 @@ function App() {
                 />
 
 
-                {/* SALES PREDICTION */}
-                <Route
-                    path="/sales-prediction"
-                    element={
-                        <ProtectedRoute>
-                            <SalesPrediction />
-                        </ProtectedRoute>
-                    }
-                />
+                {/* =================================================
+                    ANALYTICS
+                   ================================================= */}
 
-
-                {/* ANALYTICS */}
                 <Route
                     path="/analytics"
                     element={
@@ -107,7 +134,24 @@ function App() {
                 />
 
 
-                {/* UNKNOWN URL */}
+                {/* =================================================
+                    SALES PREDICTION
+                   ================================================= */}
+
+                <Route
+                    path="/sales-prediction"
+                    element={
+                        <ProtectedRoute>
+                            <SalesPrediction />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =================================================
+                    UNKNOWN URL
+                   ================================================= */}
+
                 <Route
                     path="*"
                     element={

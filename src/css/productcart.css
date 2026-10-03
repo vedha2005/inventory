@@ -304,3 +304,52 @@
         min-width: 620px;
     }
 }
+
+/* ===== Neumorphism style override - style only ===== */
+.billing-page {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e9e6f3;
+    color: #29263a;
+}
+.billing-container {
+    border: 0;
+    border-radius: 22px;
+    background: #e9e6f3;
+    box-shadow: 14px 14px 28px rgba(163, 157, 183, .42),
+                -14px -14px 28px rgba(255, 255, 255, .88);
+}
+.billing-header {
+    border-radius: 18px;
+    background: #e9e6f3;
+    box-shadow: inset 5px 5px 12px rgba(163, 157, 183, .25),
+                inset -5px -5px 12px rgba(255, 255, 255, .7);
+}
+.billing-header h1 { color: #29263a; }
+.date-time { color: #706c7c; }
+
+.billing-section,
+.calculation-container,
+.bill-table-container {
+    border: 0;
+    border-radius: 16px;
+    background: #e9e6f3;
+    box-shadow: 9px 9px 18px rgba(163, 157, 183, .35),
+                -9px -9px 18px rgba(255, 255, 255, .8);
+}
+.billing-container input,
+.billing-container select {
+    border: 0;
+    border-radius: 10px;
+    background: #e9e6f3;
+    box-shadow: inset 3px 3px 7px rgba(163, 157, 183, .3),
+                inset -3px -3px 7px rgba(255, 255, 255, .8);
+}
+.add-button,
+.save-bill-button {
+    border-radius: 11px;
+    background: #6e3bd1;
+    color: #fff;
+    box-shadow: 5px 5px 10px rgba(163, 157, 183, .4);
+}
+.bill-table-container th { background: #6e3bd1; }
+.delete-button { border-radius: 9px; }

@@ -114,3 +114,71 @@
     .products-table { min-width: 760px; }
     .products-container { overflow-x: auto; }
 }
+
+/* ===== Neumorphism style override - style only ===== */
+.products-container {
+    font-family: "Segoe UI", Arial, sans-serif;
+    border: 0;
+    border-radius: 20px;
+    background: #e9e6f3;
+    color: #29263a;
+    box-shadow: 12px 12px 24px rgba(163, 157, 183, .45),
+                -12px -12px 24px rgba(255, 255, 255, .88);
+}
+.products-container h1 { color: #29263a; }
+.products-container h2 { color: #6e3bd1; }
+
+.product-form input,
+.customer-form input,
+.customer-form textarea,
+.search-field input,
+.filter-field select {
+    border: 0;
+    border-radius: 10px;
+    background: #e9e6f3;
+    box-shadow: inset 3px 3px 7px rgba(163, 157, 183, .32),
+                inset -3px -3px 7px rgba(255, 255, 255, .82);
+}
+.product-form input:focus,
+.customer-form input:focus,
+.customer-form textarea:focus,
+.search-field input:focus,
+.filter-field select:focus {
+    border: 0;
+    box-shadow: inset 2px 2px 5px rgba(163, 157, 183, .3),
+                inset -2px -2px 5px rgba(255, 255, 255, .8);
+}
+.add-btn,
+.save-btn,
+.pagination button {
+    border-radius: 11px;
+    background: #6e3bd1;
+    box-shadow: 5px 5px 10px rgba(163, 157, 183, .4);
+}
+.cancel-btn {
+    border-radius: 11px;
+    background: #e9e6f3;
+    box-shadow: 5px 5px 10px rgba(163, 157, 183, .35),
+                -5px -5px 10px rgba(255, 255, 255, .75);
+}
+.products-table {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #e9e6f3;
+    box-shadow: 9px 9px 18px rgba(163, 157, 183, .35),
+                -9px -9px 18px rgba(255, 255, 255, .8);
+}
+.products-table th { background: #6e3bd1; }
+.products-table td { background: #eeeaf7; }
+.view-btn,
+.edit-btn,
+.delete-btn {
+    border-radius: 9px;
+    box-shadow: 3px 3px 7px rgba(163, 157, 183, .35);
+}
+.product-modal-content {
+    border-radius: 18px;
+    background: #e9e6f3;
+    box-shadow: 14px 14px 30px rgba(163, 157, 183, .45),
+                -14px -14px 30px rgba(255, 255, 255, .85);
+}

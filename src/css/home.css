@@ -26,3 +26,19 @@ body {
   color: #888881;
   font-size: 18px;
 }
+
+/* ===== Neumorphism style override - style only ===== */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e9e6f3;
+    color: #29263a;
+}
+.home-container {
+    background: #e9e6f3;
+    border: 0;
+    border-radius: 24px;
+    box-shadow: 14px 14px 30px rgba(163, 157, 183, .45),
+                -14px -14px 30px rgba(255, 255, 255, .88);
+}
+.home-container h1 { color: #29263a; }
+.home-container p { color: #706c7c; }
