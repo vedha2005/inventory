@@ -1,6 +1,9 @@
 from prefect import flow
 import mysql.connector
-from datetime import date
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
+import subprocess
+import sys
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -21,6 +24,98 @@ def get_connection():
     )
 
     return connection
+
+
+# ============================================================
+# REGISTER GENERATED REPORT IN MYSQL
+# ============================================================
+
+def register_eod_report(
+    connection,
+    report_date,
+    report_type,
+    branch_id,
+    report_name,
+    file_path
+):
+
+    cursor = connection.cursor()
+
+    sql = """
+        INSERT INTO eod_reports (
+            report_date,
+            report_type,
+            branch_id,
+            report_name,
+            file_path
+        )
+        VALUES (%s, %s, %s, %s, %s)
+    """
+
+    cursor.execute(
+        sql,
+        (
+            report_date,
+            report_type,
+            branch_id,
+            report_name,
+            file_path
+        )
+    )
+
+    connection.commit()
+    cursor.close()
+
+    print(
+        f"Report registered in database: {report_name}"
+    )
+
+
+# ============================================================
+# RUN ML PREDICTION
+# ============================================================
+
+def run_ml_prediction():
+
+    ml_script = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "ml",
+            "model.py"
+        )
+    )
+
+    print("=" * 60)
+    print("STARTING WEEKLY ML PREDICTION")
+    print("=" * 60)
+    print(f"ML script: {ml_script}")
+
+    if not os.path.exists(ml_script):
+        raise FileNotFoundError(
+            f"ML model script not found: {ml_script}"
+        )
+
+    result = subprocess.run(
+        [sys.executable, ml_script],
+        cwd=os.path.dirname(ml_script),
+        capture_output=True,
+        text=True
+    )
+
+    if result.stdout:
+        print(result.stdout)
+
+    if result.stderr:
+        print(result.stderr)
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"ML prediction failed with exit code {result.returncode}"
+        )
+
+    print("WEEKLY ML PREDICTION COMPLETED SUCCESSFULLY")
+    print("=" * 60)
 
 
 # ============================================================
@@ -976,7 +1071,7 @@ def eod_report():
     # TODAY
     # --------------------------------------------------------
 
-    today = date.today()
+    today = datetime.now(ZoneInfo("Asia/Kolkata")).date()
 
     print(
         f"Generating EOD reports for: {today}"
@@ -987,7 +1082,7 @@ def eod_report():
     # --------------------------------------------------------
 
     reports_folder = os.path.join(
-        os.getcwd(),
+        os.path.dirname(os.path.abspath(__file__)),
         "reports"
     )
 
@@ -1091,7 +1186,7 @@ def eod_report():
 
         # Create branch PDF
 
-        create_branch_pdf(
+        branch_pdf_path = create_branch_pdf(
             branch,
             summary,
             products_sold,
@@ -1099,6 +1194,15 @@ def eod_report():
             low_stock_products,
             today,
             reports_folder
+        )
+
+        register_eod_report(
+            connection,
+            today,
+            "DAILY",
+            branch_id,
+            os.path.basename(branch_pdf_path),
+            branch_pdf_path
         )
 
         # Store branch summary
@@ -1124,11 +1228,26 @@ def eod_report():
         "Generating Super Admin All Branches report..."
     )
 
-    create_all_branches_pdf(
+    all_branches_pdf_path = create_all_branches_pdf(
         branch_reports,
         today,
         reports_folder
     )
+
+    register_eod_report(
+        connection,
+        today,
+        "DAILY",
+        None,
+        os.path.basename(all_branches_pdf_path),
+        all_branches_pdf_path
+    )
+
+    # --------------------------------------------------------
+    # RUN WEEKLY ML PREDICTION
+    # --------------------------------------------------------
+
+    run_ml_prediction()
 
     # --------------------------------------------------------
     # CLOSE DATABASE
@@ -1149,10 +1268,8 @@ def eod_report():
 # ============================================================
 # PREFECT DEPLOYMENT
 # ============================================================
-
 if __name__ == "__main__":
-
     eod_report.serve(
         name="supermart-eod-deployment",
-        cron="*/5 * * * *"
+        cron="0 23 * * *"
     )

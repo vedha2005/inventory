@@ -15,6 +15,9 @@ import Cart from "./pages/cart";
 import Customers from "./pages/customers";
 import SalesPrediction from "./pages/salesprediction";
 import Analytics from "./pages/analytics";
+import EODReports from "./pages/eodreports";
+
+
 // =========================================================
 // PROTECTED ROUTE
 // =========================================================
@@ -42,7 +45,6 @@ function App() {
 
             {/* =================================================
                 NAVBAR
-                Previous / Next + Logout
                ================================================= */}
 
             <Navbar />
@@ -143,6 +145,20 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <SalesPrediction />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =================================================
+                    EOD REPORTS
+                   ================================================= */}
+
+                <Route
+                    path="/eod-reports"
+                    element={
+                        <ProtectedRoute>
+                            <EODReports />
                         </ProtectedRoute>
                     }
                 />

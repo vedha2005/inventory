@@ -20,10 +20,6 @@ function Admin() {
     // =====================================================
 
     useEffect(() => {
-        // =================================================
-        // DASHBOARD URL
-        // =================================================
-
         let dashboardUrl =
             "http://localhost:5000/api/dashboard";
 
@@ -36,7 +32,6 @@ function Admin() {
 
         if (role === "SUPER_ADMIN") {
             dashboardUrl += "?role=SUPER_ADMIN";
-
             lowStockUrl += "?role=SUPER_ADMIN";
         } else {
             dashboardUrl +=
@@ -156,7 +151,9 @@ function Admin() {
             ================================================= */}
 
             <div className="dashboard-header">
+
                 <div>
+
                     <h1>
                         SuperMart Dashboard
                     </h1>
@@ -168,11 +165,14 @@ function Admin() {
                         </strong>{" "}
                         👋
                     </p>
+
                 </div>
+
 
                 {/* USER INFORMATION */}
 
                 <div className="user-info">
+
                     <p>
                         👤{" "}
                         <strong>
@@ -198,8 +198,11 @@ function Admin() {
                                   `Branch ${branchId}`}
                         </strong>
                     </p>
+
                 </div>
+
             </div>
+
 
             {/* =================================================
                 QUICK NAVIGATION
@@ -209,10 +212,15 @@ function Admin() {
                 className="dashboard-nav"
                 aria-label="Dashboard navigation"
             >
+
                 <div className="dashboard-nav-title">
                 </div>
 
+
                 <div className="dashboard-nav-buttons">
+
+                    {/* PRODUCTS */}
+
                     <Link
                         to="/products"
                         className="dashboard-nav-button"
@@ -220,6 +228,9 @@ function Admin() {
                         <span>🛒</span>
                         <span>Products</span>
                     </Link>
+
+
+                    {/* CUSTOMERS */}
 
                     <Link
                         to="/customers"
@@ -229,6 +240,9 @@ function Admin() {
                         <span>Customers</span>
                     </Link>
 
+
+                    {/* NEW BILL */}
+
                     <Link
                         to="/cart"
                         className="dashboard-nav-button"
@@ -236,6 +250,9 @@ function Admin() {
                         <span>🧾</span>
                         <span>New Bill</span>
                     </Link>
+
+
+                    {/* ANALYTICS */}
 
                     <Link
                         to="/analytics"
@@ -245,6 +262,9 @@ function Admin() {
                         <span>Analytics</span>
                     </Link>
 
+
+                    {/* SALES PREDICTION */}
+
                     <Link
                         to="/sales-prediction"
                         className="dashboard-nav-button"
@@ -252,8 +272,22 @@ function Admin() {
                         <span>📈</span>
                         <span>Sales Prediction</span>
                     </Link>
+
+
+                    {/* EOD REPORTS */}
+
+                    <Link
+                        to="/eod-reports"
+                        className="dashboard-nav-button"
+                    >
+                        <span>📄</span>
+                        <span>EOD Reports</span>
+                    </Link>
+
                 </div>
+
             </nav>
+
 
             {/* =================================================
                 DASHBOARD CARDS
@@ -264,11 +298,13 @@ function Admin() {
                 {/* PRODUCTS */}
 
                 <div className="dashboard-card">
+
                     <div className="card-icon">
                         🛒
                     </div>
 
                     <div>
+
                         <h2>
                             {productCount}
                         </h2>
@@ -276,17 +312,22 @@ function Admin() {
                         <p>
                             Total Products
                         </p>
+
                     </div>
+
                 </div>
+
 
                 {/* CUSTOMERS */}
 
                 <div className="dashboard-card">
+
                     <div className="card-icon">
                         👥
                     </div>
 
                     <div>
+
                         <h2>
                             {customerCount}
                         </h2>
@@ -294,27 +335,39 @@ function Admin() {
                         <p>
                             Total Customers
                         </p>
+
                     </div>
+
                 </div>
+
             </div>
+
 
             {/* =================================================
                 LOW STOCK ALERT
             ================================================= */}
 
             <div className="low-stock-alert">
+
                 <h2>
                     ⚠ Low Stock Alert
                 </h2>
 
+
                 {lowStockProducts.length === 0 ? (
+
                     <p>
                         ✅ All products have sufficient stock.
                     </p>
+
                 ) : (
+
                     <table>
+
                         <thead>
+
                             <tr>
+
                                 <th>
                                     ID
                                 </th>
@@ -322,6 +375,7 @@ function Admin() {
                                 <th>
                                     Product Name
                                 </th>
+
 
                                 {/* SHOW BRANCH ONLY FOR SUPER ADMIN */}
 
@@ -334,15 +388,21 @@ function Admin() {
                                 <th>
                                     Quantity Left
                                 </th>
+
                             </tr>
+
                         </thead>
 
+
                         <tbody>
+
                             {lowStockProducts.map(
                                 (product) => (
+
                                     <tr
                                         key={`${product.id}-${product.branch_id}`}
                                     >
+
                                         <td>
                                             {product.id}
                                         </td>
@@ -350,6 +410,7 @@ function Admin() {
                                         <td>
                                             {product.product_name}
                                         </td>
+
 
                                         {/* BRANCH NAME */}
 
@@ -359,18 +420,26 @@ function Admin() {
                                             </td>
                                         )}
 
+
                                         <td>
                                             ⚠{" "}
                                             {product.quantity}{" "}
                                             left
                                         </td>
+
                                     </tr>
+
                                 )
                             )}
+
                         </tbody>
+
                     </table>
+
                 )}
+
             </div>
+
 
             {/* =================================================
                 STOCK CHART
@@ -380,8 +449,11 @@ function Admin() {
                 className="stock-chart"
                 aria-labelledby="stock-chart-title"
             >
+
                 <div className="section-heading">
+
                     <div>
+
                         <p className="section-kicker">
                             Inventory health
                         </p>
@@ -389,21 +461,29 @@ function Admin() {
                         <h2 id="stock-chart-title">
                             Low-stock overview
                         </h2>
+
                     </div>
 
                     <span className="chart-unit">
                         Units left
                     </span>
+
                 </div>
 
+
                 {lowStockProducts.length === 0 ? (
+
                     <p className="chart-empty">
                         No low-stock products to chart.
                     </p>
+
                 ) : (
+
                     <div className="stock-bars">
+
                         {lowStockProducts.map(
                             (product) => {
+
                                 const barWidth =
                                     Math.max(
                                         (
@@ -416,35 +496,49 @@ function Admin() {
                                     );
 
                                 return (
+
                                     <div
                                         className="stock-bar-row"
                                         key={`${product.id}-${product.branch_id}-chart`}
                                     >
+
                                         <span className="stock-bar-label">
+
                                             {role === "SUPER_ADMIN"
                                                 ? `${product.product_name} - ${product.branch_name}`
                                                 : product.product_name}
+
                                         </span>
 
+
                                         <div className="stock-bar-track">
+
                                             <span
                                                 className="stock-bar-fill"
                                                 style={{
                                                     width: `${barWidth}%`
                                                 }}
                                             />
+
                                         </div>
+
 
                                         <strong>
                                             {product.quantity}
                                         </strong>
+
                                     </div>
+
                                 );
                             }
                         )}
+
                     </div>
+
                 )}
+
             </section>
+
         </div>
     );
 }

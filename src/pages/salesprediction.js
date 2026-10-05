@@ -3,126 +3,475 @@ import axios from "axios";
 import "../css/salesprediction.css";
 
 function SalesPrediction() {
+
     const [prediction, setPrediction] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+
+
+    // ========================================================
+    // LOAD SALES PREDICTION
+    // ========================================================
 
     useEffect(() => {
-        axios
-            .get("http://localhost:5000/api/owner-prediction")
-            .then((response) => {
-                console.log("Sales Prediction:", response.data);
 
-                if (response.data.prediction) {
-                    setPrediction(response.data.prediction);
-                } else {
-                    setMessage(
-                        response.data.message ||
-                        "No sales prediction available yet."
-                    );
-                }
-            })
-            .catch((error) => {
-                console.log("Sales Prediction Error:", error);
+        const loadPrediction = async () => {
+
+            try {
+
+                setLoading(true);
+                setError("");
+
+                const response = await axios.get(
+                    "http://localhost:5000/api/sales-prediction"
+                );
+
+                setPrediction(response.data);
+
+            } catch (err) {
+
+                console.error(
+                    "Sales Prediction Error:",
+                    err
+                );
 
                 if (
-                    error.response &&
-                    error.response.status === 404
+                    err.response &&
+                    err.response.status === 404
                 ) {
-                    setMessage(
-                        error.response.data.message ||
-                        "No sales prediction available yet."
+
+                    setError(
+                        "No prediction available. Please run the ML model first."
                     );
+
                 } else {
-                    setMessage(
+
+                    setError(
                         "Unable to load sales prediction."
                     );
                 }
-            })
-            .finally(() => {
+
+            } finally {
+
                 setLoading(false);
-            });
+
+            }
+        };
+
+
+        loadPrediction();
+
     }, []);
 
+
+    // ========================================================
+    // LOADING
+    // ========================================================
+
+    if (loading) {
+
+        return (
+            <div className="sales-prediction-container">
+
+                <div className="sales-prediction-header">
+
+                    <p>Machine Learning</p>
+
+                    <h1>
+                        📈 Sales Prediction
+                    </h1>
+
+                    <span>
+                        Loading prediction data...
+                    </span>
+
+                </div>
+
+                <div className="prediction-message">
+                    Loading real prediction data...
+                </div>
+
+            </div>
+        );
+    }
+
+
+    // ========================================================
+    // ERROR
+    // ========================================================
+
+    if (error) {
+
+        return (
+            <div className="sales-prediction-container">
+
+                <div className="sales-prediction-header">
+
+                    <p>Machine Learning</p>
+
+                    <h1>
+                        📈 Sales Prediction
+                    </h1>
+
+                    <span>
+                        Weekly sales and product prediction
+                    </span>
+
+                </div>
+
+                <div className="prediction-error">
+                    {error}
+                </div>
+
+            </div>
+        );
+    }
+
+
+    // ========================================================
+    // NO DATA
+    // ========================================================
+
+    if (!prediction) {
+
+        return (
+            <div className="sales-prediction-container">
+
+                <div className="sales-prediction-header">
+
+                    <p>Machine Learning</p>
+
+                    <h1>
+                        📈 Sales Prediction
+                    </h1>
+
+                </div>
+
+                <div className="prediction-message">
+                    No prediction data available.
+                </div>
+
+            </div>
+        );
+    }
+
+
+    // ========================================================
+    // FORMAT DATES
+    // ========================================================
+
+    const formatDate = (dateValue) => {
+
+        if (!dateValue) {
+            return "-";
+        }
+
+        const date = new Date(dateValue);
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+    };
+
+
+    // ========================================================
+    // FORMAT CURRENCY
+    // ========================================================
+
+    const formatCurrency = (value) => {
+
+        return `₹${Number(value).toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        )}`;
+    };
+
+
+    // ========================================================
+    // MAIN PAGE
+    // ========================================================
+
     return (
+
         <div className="sales-prediction-container">
 
+            {/* =================================================
+                HEADER
+            ================================================= */}
+
             <div className="sales-prediction-header">
-                <p>Owner Analytics</p>
 
-                <h1>📈 Sales Prediction</h1>
+                <div>
 
-                <span>
-                    ML-based sales forecasting
-                </span>
+                    <p>
+                        Machine Learning
+                    </p>
+
+                    <h1>
+                        📈 Sales Prediction
+                    </h1>
+
+                    <span>
+                        Predictive insights for the next 7 days
+                    </span>
+
+                </div>
+
             </div>
 
-            {loading ? (
-                <div className="prediction-card">
-                    <h2>Loading prediction...</h2>
 
-                    <p>
-                        Fetching the latest prediction.
-                    </p>
-                </div>
+            {/* =================================================
+                PREDICTION PERIOD
+            ================================================= */}
 
-            ) : prediction ? (
+            <div className="prediction-period-card">
 
-                <div className="prediction-card">
+                <div>
 
-                    <p className="prediction-label">
-                        Expected Sales
-                    </p>
+                    <span className="prediction-label">
+                        Prediction Period
+                    </span>
 
                     <h2>
-                        ₹
-                        {Number(
-                            prediction.predicted_sales
-                        ).toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}
+                        {formatDate(
+                            prediction.week_start
+                        )}
+                        {" "}
+                        →{" "}
+                        {formatDate(
+                            prediction.week_end
+                        )}
                     </h2>
 
-                    <p>
-                        Prediction Date:{" "}
+                </div>
+
+
+                <div>
+
+                    <span className="prediction-label">
+                        Historical Data
+                    </span>
+
+                    <h2>
+                        {prediction.historical_days} days
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            {/* =================================================
+                EXPECTED SALES
+            ================================================= */}
+
+            <section className="expected-sales-card">
+
+                <div className="expected-sales-content">
+
+                    <div>
+
+                        <span className="prediction-label">
+                            Expected Sales
+                        </span>
+
+                        <h2>
+                            {formatCurrency(
+                                prediction.expected_sales
+                            )}
+                        </h2>
+
+                        <p>
+                            Predicted total sales for the
+                            next 7 days
+                        </p>
+
+                    </div>
+
+                    <div className="prediction-icon">
+                        📈
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* =================================================
+                TOP PRODUCTS
+            ================================================= */}
+
+            <section className="top-products-card">
+
+                <div className="prediction-card-header">
+
+                    <div>
+
+                        <h2>
+                            🏆 Products Expected to Sell Most
+                        </h2>
+
+                        <p>
+                            Top products predicted to have
+                            the highest sales quantity
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {prediction.top_products &&
+                prediction.top_products.length > 0 ? (
+
+                    <div className="top-products-list">
+
+                        {prediction.top_products.map(
+                            (product, index) => (
+
+                                <div
+                                    className="top-product-item"
+                                    key={product.product_id}
+                                >
+
+                                    <div className="product-rank">
+                                        {index + 1}
+                                    </div>
+
+
+                                    <div className="product-info">
+
+                                        <h3>
+                                            {product.product_name}
+                                        </h3>
+
+                                        <span>
+                                            Product ID:{" "}
+                                            {product.product_id}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div className="predicted-quantity">
+
+                                        <strong>
+                                            {Number(
+                                                product.predicted_quantity
+                                            ).toLocaleString(
+                                                "en-IN"
+                                            )}
+                                        </strong>
+
+                                        <span>
+                                            units
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        )}
+
+                    </div>
+
+                ) : (
+
+                    <div className="prediction-message">
+
+                        No product predictions available.
+
+                    </div>
+
+                )}
+
+            </section>
+
+
+            {/* =================================================
+                ML INFORMATION
+            ================================================= */}
+
+            <section className="ml-info-card">
+
+                <h2>
+                    🤖 About This Prediction
+                </h2>
+
+                <p>
+                    The prediction is generated using
+                    historical sales data from the SuperMart
+                    database. A machine learning model analyzes
+                    previous sales patterns to estimate total
+                    sales for the next 7 days and identify the
+                    products expected to sell the most.
+                </p>
+
+                <div className="ml-info-grid">
+
+                    <div>
+
                         <strong>
-                            {new Date(
-                                prediction.prediction_date
-                            ).toLocaleDateString("en-IN")}
+                            Data Source
                         </strong>
-                    </p>
 
-                    <p>
-                        Based on{" "}
+                        <span>
+                            SQLMesh daily sales analytics
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
                         <strong>
-                            {prediction.historical_days}
-                        </strong>{" "}
-                        historical sales days.
-                    </p>
+                            Prediction Period
+                        </strong>
+
+                        <span>
+                            Next 7 days
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Model
+                        </strong>
+
+                        <span>
+                            Linear Regression
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Historical Data
+                        </strong>
+
+                        <span>
+                            {prediction.historical_days} days
+                        </span>
+
+                    </div>
 
                 </div>
 
-            ) : (
-
-                <div className="prediction-card">
-
-                    <h2>
-                        Data unavailable
-                    </h2>
-
-                    <p>
-                        {message}
-                    </p>
-
-                    <p>
-                        The ML model will generate a
-                        prediction when enough real
-                        historical sales data is available.
-                    </p>
-
-                </div>
-            )}
+            </section>
 
         </div>
     );
